@@ -322,7 +322,79 @@ class LocalEventQueue {
 
   subscribe(listener) {
     this.listeners.add(listener);
-    return () => this.listeners.delete(listener);
+    
+  const handleHardwareEvent = (rawInput) => {
+    try {
+      const payload = typeof rawInput === "string" ? JSON.parse(rawInput.trim()) : rawInput;
+      const now = new Date().toISOString();
+      const evtId = "EVT-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+
+      if (payload.event === "accident.detected") {
+        const severity = Number(payload.impactSeverity || 85);
+        const estAmount = Math.max(15000, severity * 600);
+        const isHighRisk = estAmount > 40000;
+        const newClaimId = "CLM-" + Math.floor(1000 + Math.random() * 9000);
+
+        const crashEvent = {
+          id: evtId,
+          name: "accident.detected",
+          timestamp: now,
+          status: "processed",
+          payload,
+          summary: `🚨 CRASH DETECTED [${payload.vehicleId || "CAR-PL-409"}] • ${payload.trigger || "high_g_impact"} (${severity}% G-Force) @ Warsaw GPS (${payload.lat || 52.2297}, ${payload.lng || 21.0122})`
+        };
+
+        const autoClaim = {
+          id: newClaimId,
+          policyNumber: "POL-8841",
+          customerName: `Telematics Auto-Claim (${payload.vehicleId || "CAR-PL-409"})`,
+          incidentDate: now.split("T")[0],
+          description: `ESP32 Crash Sensor (${payload.trigger || "high_g_impact"}, ${severity}% impact) at GPS ${payload.lat || 52.2297}, ${payload.lng || 21.0122}. Emergency services alerted.`,
+          estimatedAmount: estAmount,
+          status: isHighRisk ? "flagged" : "under_review",
+          assignedAdjuster: "Marek Kowalski",
+          createdAt: now
+        };
+
+        const submitEvt = {
+          id: "EVT-" + Math.random().toString(36).substring(2, 10).toUpperCase(),
+          name: isHighRisk ? "claim_flagged" : "claim_submitted",
+          timestamp: now,
+          status: "processed",
+          payload: { claimId: newClaimId, estimatedAmount: estAmount },
+          summary: isHighRisk
+            ? `Auto-claim ${newClaimId} (${estAmount.toLocaleString("pl-PL")} zł) flagged (> 40 000 zł threshold)`
+            : `Auto-claim ${newClaimId} opened from ESP32 GPS telemetry (${estAmount.toLocaleString("pl-PL")} zł)`
+        };
+
+        if (typeof setClaims === "function") setClaims(prev => [autoClaim, ...prev]);
+        if (typeof setEventLog === "function") setEventLog(prev => [submitEvt, crashEvent, ...prev]);
+        if (typeof setEvents === "function") setEvents(prev => [submitEvt, crashEvent, ...prev]);
+
+        setHwAlert(`🚨 ${crashEvent.summary} -> Opened ${newClaimId} (${estAmount.toLocaleString("pl-PL")} zł)`);
+        setHwJsonInput("");
+      } else if (payload.event === "kiosk.request.created") {
+        const kioskEvent = {
+          id: evtId,
+          name: "kiosk.request.created",
+          timestamp: now,
+          status: "processed",
+          payload,
+          summary: `🖥️ KIOSK [${payload.kioskId || "branch-desk-01"}] Ticket ${payload.ticket || "T-101"}: ${(payload.requestType || "new_claim").toUpperCase()} (${payload.priority || "normal"})`
+        };
+        if (typeof setEventLog === "function") setEventLog(prev => [kioskEvent, ...prev]);
+        if (typeof setEvents === "function") setEvents(prev => [kioskEvent, ...prev]);
+        setHwAlert(`✅ ${kioskEvent.summary}`);
+        setHwJsonInput("");
+      } else {
+        setHwAlert("⚠️ Unknown event type. Expected accident.detected or kiosk.request.created.");
+      }
+    } catch (err) {
+      setHwAlert("⚠️ Invalid JSON — paste a complete single-line JSON object from Wokwi Serial Monitor.");
+    }
+  };
+
+  return () => this.listeners.delete(listener);
   }
 
   notify() {
