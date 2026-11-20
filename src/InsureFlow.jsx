@@ -98,11 +98,11 @@ const INITIAL_SEED_DATA = () => {
       createdAt: iso(86400000 * 2),
       updatedAt: iso(3600000 * 5),
       timeline: [
-        { time: iso(86400000 * 2), title: 'Claim Submitted', detail: 'Submitted by Daniel Mercer ($4,250)', type: 'info' },
+        { time: iso(86400000 * 2), title: 'Claim Submitted', detail: 'Submitted by Daniel Mercer (4,250)', type: 'info' },
         { time: iso(86400000 * 2 - 400), title: 'Policy Verified', detail: 'Policy POL-884920 active and valid', type: 'success' },
         { time: iso(86400000 * 2 - 800), title: 'Risk Screening Passed', detail: 'No anomalies detected; routed to Under Review', type: 'success' },
         { time: iso(86400000), title: 'Adjuster Assigned', detail: 'Assigned to Sarah Jenkins', type: 'info' },
-        { time: iso(3600000 * 5), title: 'Claim Approved', detail: 'Approved for payout of $4,250.00', type: 'success' }
+        { time: iso(3600000 * 5), title: 'Claim Approved', detail: 'Approved for payout of 4,250.00', type: 'success' }
       ]
     },
     {
@@ -117,7 +117,7 @@ const INITIAL_SEED_DATA = () => {
       status: 'Flagged for Review',
       assignedAdjuster: null,
       flagReasons: [
-        'Estimated damage ($24,800) exceeds $15,000 automated threshold',
+        'Estimated damage (24,800) exceeds 15,000 automated threshold',
         'High-risk keyword detected in description: "totaled", "no witnesses"'
       ],
       rejectionReason: null,
@@ -129,9 +129,9 @@ const INITIAL_SEED_DATA = () => {
       createdAt: iso(3600000 * 14),
       updatedAt: iso(3600000 * 14),
       timeline: [
-        { time: iso(3600000 * 14), title: 'Claim Submitted', detail: 'Submitted by Victoria Sterling ($24,800)', type: 'info' },
+        { time: iso(3600000 * 14), title: 'Claim Submitted', detail: 'Submitted by Victoria Sterling (24,800)', type: 'info' },
         { time: iso(3600000 * 14 - 400), title: 'Policy Verified', detail: 'Policy POL-331094 active and valid', type: 'success' },
-        { time: iso(3600000 * 14 - 800), title: 'Claim Flagged by Risk Engine', detail: 'Damage > $15k & keywords ("totaled", "no witnesses")', type: 'warning' }
+        { time: iso(3600000 * 14 - 800), title: 'Claim Flagged by Risk Engine', detail: 'Damage > 15k & keywords ("totaled", "no witnesses")', type: 'warning' }
       ]
     },
     {
@@ -155,11 +155,11 @@ const INITIAL_SEED_DATA = () => {
       createdAt: iso(86400000 * 6),
       updatedAt: iso(86400000 * 3),
       timeline: [
-        { time: iso(86400000 * 6), title: 'Claim Submitted', detail: 'Submitted by Arthur Pendelton ($890)', type: 'info' },
+        { time: iso(86400000 * 6), title: 'Claim Submitted', detail: 'Submitted by Arthur Pendelton (890)', type: 'info' },
         { time: iso(86400000 * 6 - 400), title: 'Policy Verified', detail: 'Policy POL-559102 active and valid', type: 'success' },
         { time: iso(86400000 * 5), title: 'Adjuster Assigned', detail: 'Assigned to Elena Rostova', type: 'info' },
-        { time: iso(86400000 * 4), title: 'Claim Approved', detail: 'Approved for payout of $890.00', type: 'success' },
-        { time: iso(86400000 * 3), title: 'Payment Processed', detail: 'Disbursed $890.00 via EFT', type: 'success' }
+        { time: iso(86400000 * 4), title: 'Claim Approved', detail: 'Approved for payout of 890.00', type: 'success' },
+        { time: iso(86400000 * 3), title: 'Payment Processed', detail: 'Disbursed 890.00 via EFT', type: 'success' }
       ]
     }
   ];
@@ -225,7 +225,7 @@ const INITIAL_SEED_DATA = () => {
       claimId: 'CLM-2026-4905',
       payload: {
         claimId: 'CLM-2026-4905',
-        reasons: ['Damage exceeds $15,000', 'Keywords: totaled, no witnesses']
+        reasons: ['Damage exceeds 15,000', 'Keywords: totaled, no witnesses']
       }
     },
     {
@@ -247,7 +247,7 @@ const INITIAL_SEED_DATA = () => {
       recipient: 'd.mercer@example.com',
       customerName: 'Daniel Mercer',
       subject: 'Claim CLM-2026-4821 Approved',
-      message: 'Good news! Your claim CLM-2026-4821 has been approved for $4,250.00. Payment disbursement is now eligible.',
+      message: 'Good news! Your claim CLM-2026-4821 has been approved for 4,250.00. Payment disbursement is now eligible.',
       timestamp: iso(3600000 * 5),
       read: false
     },
@@ -267,7 +267,7 @@ const INITIAL_SEED_DATA = () => {
       recipient: 'arthur.p@example.com',
       customerName: 'Arthur Pendelton',
       subject: 'Payment Disbursed for Claim CLM-2026-4712',
-      message: 'A settlement payment of $890.00 has been processed for your claim CLM-2026-4712.',
+      message: 'A settlement payment of 890.00 has been processed for your claim CLM-2026-4712.',
       timestamp: iso(86400000 * 3),
       read: true
     }
@@ -719,7 +719,7 @@ export default function App() {
 
       const flagReasons = [];
       if (Number(claim.estimatedDamage) > 15000) {
-        flagReasons.push(`Estimated damage (${formatCurrency(claim.estimatedDamage)}) exceeds $15,000 automated threshold`);
+        flagReasons.push(`Estimated damage (${formatCurrency(claim.estimatedDamage)}) exceeds 15,000 automated threshold`);
       }
 
       const riskKeywords = ['totaled', 'stolen', 'cash', 'no witnesses'];
@@ -1842,7 +1842,7 @@ function CustomerPortalView({
       return;
     }
     if (!form.estimatedDamage || Number(form.estimatedDamage) <= 0) {
-      setFormError('Estimated damage amount must be greater than $0.');
+      setFormError('Estimated damage amount must be greater than 0.');
       return;
     }
 
@@ -2008,7 +2008,7 @@ function CustomerPortalView({
                 placeholder="e.g., 4500"
                 className="w-full px-3.5 py-2 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <span className="text-[10px] text-slate-400">&gt; $15,000 triggers Risk Screening flag</span>
+              <span className="text-[10px] text-slate-400">&gt; 15,000 triggers Risk Screening flag</span>
             </div>
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1">
@@ -2423,7 +2423,7 @@ function DocumentationView() {
       name: 'claim_flagged',
       producer: 'RiskScreeningHandler',
       handler: 'FlaggedEscalationHandler',
-      purpose: 'Flags high-value claims (>$15,000), suspicious keywords, or future accident dates.',
+      purpose: 'Flags high-value claims (>15,000), suspicious keywords, or future accident dates.',
       next: 'Marks claim as Flagged for Review and emits customer_notified.'
     },
     {
@@ -2507,7 +2507,7 @@ function DocumentationView() {
           </li>
           <li>
             <strong>Automated Risk Flagging:</strong> Click <strong>&ldquo;2. High-Value Flagged Claim&rdquo;</strong>{' '}
-            and submit. Because damage exceeds $15,000 and contains &ldquo;stolen&rdquo; / &ldquo;no witnesses&rdquo;, the{' '}
+            and submit. Because damage exceeds 15,000 and contains &ldquo;stolen&rdquo; / &ldquo;no witnesses&rdquo;, the{' '}
             <code>RiskScreeningHandler</code> emits <code>claim_flagged</code>.
           </li>
           <li>

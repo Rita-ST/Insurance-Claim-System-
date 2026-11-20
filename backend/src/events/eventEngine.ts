@@ -93,10 +93,10 @@ dispatcher.register('claim_submitted', (event) => {
 
   dispatcher.publish('policy_verified', { claimId, policyNumber });
 
-  if (estimatedAmount > 10000 || description.trim().length < 15) {
+  if (estimatedAmount > 40000 || description.trim().length < 15) {
     dispatcher.publish('claim_flagged', {
       claimId,
-      reason: estimatedAmount > 10000 ? 'High claim value (> $10,000)' : 'Incomplete accident description',
+      reason: estimatedAmount > 40000 ? 'High claim value (> 40 000 zł)' : 'Incomplete accident description',
     });
   }
 });
@@ -178,7 +178,7 @@ dispatcher.register('claim_approved', (event) => {
     dispatcher.publish('customer_notified', {
       claimId: claim.id,
       email: claim.customerEmail,
-      message: `Your claim for $${claim.estimatedAmount} has been approved for payout.`,
+      message: `Your claim for ${claim.estimatedAmount} zł has been approved for payout.`,
     });
   }
 });
@@ -222,7 +222,7 @@ dispatcher.register('payment_processed', (event) => {
     dispatcher.publish('customer_notified', {
       claimId: claim.id,
       email: claim.customerEmail,
-      message: `Payout of $${claim.estimatedAmount} processed (Ref: ${event.payload.reference}).`,
+      message: `Payout of ${claim.estimatedAmount} zł processed (Ref: ${event.payload.reference}).`,
     });
   }
 });
