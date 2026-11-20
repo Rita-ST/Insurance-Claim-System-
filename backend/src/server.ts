@@ -83,4 +83,19 @@ app.post('/api/claims/:id/pay', (req, res) => {
 });
 
 const PORT = 4000;
+
+// Hardware ESP32 Kiosk Producer Endpoint
+app.post("/api/kiosk-events", (req, res) => {
+  const { kioskId = "branch-desk-01", ticket, requestType, priority = "normal" } = req.body;
+  if (!ticket || !requestType) return res.status(400).json({ error: "Missing ticket or requestType" });
+  const evt = dispatcher.publish("kiosk.request.created", {
+    kioskId,
+    ticket,
+    requestType,
+    priority,
+    summary: `[${kioskId}] Ticket ${ticket}: ${requestType.toUpperCase()} (${priority})`
+  });
+  res.status(202).json({ accepted: true, event: evt });
+});
+
 app.listen(PORT, () => console.log(`InsureFlow EDP Backend running on http://localhost:${PORT}`));
