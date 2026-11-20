@@ -14,7 +14,7 @@ The project demonstrates how independent system components communicate and respo
 
 ## Live Application
 
-- **Live Website:** [YOUR_VERCEL_URL](https://YOUR_VERCEL_URL)
+- **Live Website:** [YOUR_VERCEL_URL](https://insurance-claim-system-gonp.vercel.app/)
 - **Local Frontend:** http://localhost:5173
 - **Local Backend API:** http://localhost:3000
 
