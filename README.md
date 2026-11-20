@@ -26,3 +26,9 @@
 2. **Risk Flagging Flow:** Submit a claim with Amount `55 000 zł`. Observe `claim_flagged` trigger automatically due to the `> 40 000 zł` rule.
 3. **Invalid Policy Flow:** Submit a claim with Policy `INVALID-99`. Observe `policy_verification_failed` automatically reject the claim.
 4. **Staff Resolution & Payment Guardrail:** Assign an adjuster, approve the valid claim, and trigger `payment_processed`. Attempt to pay a rejected or pending claim to verify the guardrail blocks unauthorized payouts.
+
+## Producer 2: Vehicle Accident & GPS Location Sensor (`producer/accident-sensor/`)
+- **Interactive Simulation:** [https://wokwi.com/projects/481222649888585729](https://wokwi.com/projects/481222649888585729)
+- **Edge-Latched G-Force Potentiometer (GPIO 34):** Fires `accident.detected` once when impact >= 75%, resetting only below 65% (hysteresis prevents duplicate alerts).
+- **Manual SOS Interrupt (GPIO 14):** `FALLING` edge hardware interrupt with 300ms debounce.
+- **Telemetry Payload:** Emits `vehicleId` (`CAR-PL-409`), `impactSeverity`, and Warsaw GPS (`52.2297, 21.0122`), triggering an automated claim submission in InsureFlow.

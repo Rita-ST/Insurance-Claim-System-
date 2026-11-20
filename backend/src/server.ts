@@ -98,4 +98,29 @@ app.post("/api/kiosk-events", (req, res) => {
   res.status(202).json({ accepted: true, event: evt });
 });
 
+
+// Hardware ESP32 Vehicle Accident & GPS Sensor Endpoint
+app.post("/api/accident-events", (req, res) => {
+  const { vehicleId = "CAR-PL-409", seq = 1, trigger = "high_g_impact", impactSeverity = 80, lat = 52.2297, lng = 21.0122 } = req.body;
+  const evt = dispatcher.publish("accident.detected", {
+    vehicleId,
+    seq,
+    trigger,
+    impactSeverity,
+    lat,
+    lng,
+    summary: `🚨 CRASH ALERT [${vehicleId}] via ${trigger} (${impactSeverity}% G-force) @ GPS (${lat}, ${lng})`
+  });
+  // Automatically open an emergency claim in InsureFlow
+  const estimatedAmount = Math.max(15000, impactSeverity * 600);
+  dispatcher.publish("claim_submitted", {
+    policyNumber: "POL-8841",
+    customerName: `Telematics Auto-Claim (${vehicleId})`,
+    incidentDate: new Date().toISOString().split("T")[0],
+    description: `Automated telemetry crash detection (${trigger}, severity ${impactSeverity}%) at GPS ${lat}, ${lng}. Emergency dispatch notified.`,
+    estimatedAmount
+  });
+  res.status(202).json({ accepted: true, event: evt });
+});
+
 app.listen(PORT, () => console.log(`InsureFlow EDP Backend running on http://localhost:${PORT}`));
