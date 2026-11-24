@@ -1,25 +1,14 @@
-# InsureFlow — Event-Driven Car Insurance Claims System
+# InsureFlow – Event-Driven Insurance Claims Automation
 
-- **Frontend Web App (Customer & Staff Portals):** `http://localhost:5173`
-- **Backend Event-Driven API:** `http://localhost:4000`
-- **GitHub Repository:** [Rita-ST/Insurance-Claim-System-](https://github.com/Rita-ST/Insurance-Claim-System-)
+**A Node.js-based Event-Driven Programming (EDP) project demonstrating automated insurance claim processing through event producers, a local event queue, an event dispatcher, and independent event handlers.**
 
-> **Educational Simulation Notice:** InsureFlow is a university Event-Driven Programming (EDP) demonstration project. All policy validation rules, risk screening thresholds, and payout references are simulated for educational purposes.
+## Project Overview
 
-## Features
-- **Custom Event-Driven Architecture:** Local FIFO Event Queue, Asynchronous Event Dispatcher, 10 strongly-typed domain events, and decoupled Event Handlers.
-- **Customer Portal:** Submit car accident claims in PLN (zł), upload supporting evidence, track real-time claim status, and receive automated notifications.
-- **Staff Dashboard:** Real-time KPI metrics, search/filter controls, adjuster assignment, claim approval/rejection, payment guardrails (approved claims only), and a live Event Activity Log.
-- **Local Persistence:** Data persists across server restarts via JSON storage (`backend/data.json`) and browser `localStorage`.
+InsureFlow is a car insurance claims management and automation system designed to demonstrate the principles of Event-Driven Programming.
 
-## Tech Stack
-- **Frontend:** React, Vite, Tailwind CSS, Lucide Icons
-- **Backend:** Node.js, Express, TypeScript, Vitest
+The application allows customers to submit insurance claims, provide supporting documentation, and monitor claim progress. Insurance staff can review submitted claims, assign adjusters, approve or reject claims, and process approved payments.
 
-## Installation & Running Locally
-1. **Install & Start Frontend (Root):** `npm install && npm run dev` -> open `http://localhost:5173`
-2. **Install & Start Backend (Terminal 2):** `cd backend && npm install && npm run dev` -> runs on `http://localhost:4000`
-3. **Run Backend Unit Tests:** `cd backend && npm test`
+Instead of relying on direct function calls between every component, InsureFlow uses an event-driven architecture. When an action occurs, an event is generated, placed into an event queue, and processed by the appropriate event handlers.
 
 ## Lecturer Demonstration Workflow
 1. **Valid Claim Flow:** Submit a claim with Policy `POL-8841` and Amount `12 500 zł`. Observe `claim_submitted` -> `policy_verified` -> `customer_notified`.
