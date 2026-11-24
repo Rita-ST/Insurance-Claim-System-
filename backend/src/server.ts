@@ -123,4 +123,22 @@ app.post("/api/accident-events", (req, res) => {
   res.status(202).json({ accepted: true, event: evt });
 });
 
+
+// Lightweight endpoint for Consumer ESP32 polling
+app.get("/api/dispatch-latest", (_req, res) => {
+  const state = db.read();
+  const latestCrash = state.eventLog.find((e) => e.name === "accident.detected" || e.name === "claim_submitted");
+  if (!latestCrash) return res.json({ hasEvent: false });
+  res.json({
+    hasEvent: true,
+    eventId: latestCrash.id,
+    event: "emergency.dispatched",
+    claimId: latestCrash.payload?.claimId || "CLM-911",
+    policeNotified: true,
+    lat: latestCrash.payload?.lat || 52.2297,
+    lng: latestCrash.payload?.lng || 21.0122,
+    etaMin: 6
+  });
+});
+
 app.listen(PORT, () => console.log(`InsureFlow EDP Backend running on http://localhost:${PORT}`));
