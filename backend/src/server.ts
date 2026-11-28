@@ -141,4 +141,6 @@ app.get("/api/dispatch-latest", (_req, res) => {
   });
 });
 
+app.get("/", (_req, res) => res.json({ status: "ok", service: "InsureFlow EDP Backend", endpoints: ["/api/state", "/api/accident-events", "/api/kiosk-events", "/api/dispatch-latest"] }));
+
 app.listen(PORT, () => console.log(`InsureFlow EDP Backend running on http://localhost:${PORT}`));
